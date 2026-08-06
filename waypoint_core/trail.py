@@ -1,26 +1,27 @@
 """
-Trail entity for the Week 7 Waypoint domain model.
+Abstract trail model for the Waypoint domain engine.
 """
 
+from abc import ABC, abstractmethod
 from collections.abc import Mapping
 from typing import Any
 
 from waypoint_core.distance import Distance
 
 
-class Trail:
+class Trail(ABC):
     """Represent a trail with validated identity and trail information."""
 
     ALLOWED_DIFFICULTIES = ("easy", "moderate", "hard", "expert")
     default_unit = "km"
 
     def __init__(
-        self,
-        trail_id: int,
-        name: str,
-        distance: Distance,
-        elevation_gain_m: float,
-        difficulty: str,
+            self,
+            trail_id: int,
+            name: str,
+            distance: Distance,
+            elevation_gain_m: float,
+            difficulty: str,
     ) -> None:
         self._trail_id = self.validate_trail_id(trail_id)
         self._name = self.validate_name(name)
@@ -42,7 +43,6 @@ class Trail:
     def name(self) -> str:
         """Return the trail name."""
         return self._name
-
 
     @property
     def distance(self) -> Distance:
@@ -90,7 +90,6 @@ class Trail:
 
         unit = data.get("unit", cls.default_unit)
 
-
         return cls(
             trail_id=data["id"],
             name=data["name"],
@@ -127,8 +126,8 @@ class Trail:
     def validate_elevation_gain(elevation_gain_m: float) -> float:
         """Validate a non-negative elevation gain."""
         if isinstance(elevation_gain_m, bool) or not isinstance(
-            elevation_gain_m,
-            (int, float),
+                elevation_gain_m,
+                (int, float),
         ):
             raise TypeError("Elevation gain must be a number.")
 
@@ -136,7 +135,6 @@ class Trail:
             raise ValueError("Elevation gain cannot be negative.")
 
         return float(elevation_gain_m)
-
 
     @staticmethod
     def validate_difficulty(difficulty: str) -> str:
@@ -152,6 +150,19 @@ class Trail:
 
         return normalized_difficulty
 
+    def packing_list(self) -> list[str]:
+        """Return equipment required for every trail type."""
+        return ["water", "map", "first-aid kit"]
+
+    @abstractmethod
+    def estimated_time(self) -> float:
+        """Return the estimated completion time in hours."""
+        raise NotImplementedError
+
+    @abstractmethod
+    def summary(self) -> str:
+        """Return a readable summary of the trail."""
+        raise NotImplementedError
 
     def __eq__(self, other: object) -> bool:
         """Compare trails using only their unique identifier."""

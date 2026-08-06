@@ -1,17 +1,17 @@
-"""Unit tests for the Week 7 Waypoint Itinerary class."""
+"""Unit tests for the Waypoint Itinerary class."""
 
 import unittest
 
 from waypoint_core.distance import Distance
 from waypoint_core.itinerary import Itinerary
-from waypoint_core.trail import Trail
+from waypoint_core.trail_types import DayHike
 
 
 class ItineraryTests(unittest.TestCase):
     """Test itinerary composition and total-distance behaviour."""
 
     def setUp(self) -> None:
-        self.first_trail = Trail(
+        self.first_trail = DayHike(
             trail_id=201,
             name="Aspen Walk",
             distance=Distance(2, "km"),
@@ -19,7 +19,7 @@ class ItineraryTests(unittest.TestCase):
             difficulty="easy",
         )
 
-        self.second_trail = Trail(
+        self.second_trail = DayHike(
             trail_id=202,
             name="Lake Ridge",
             distance=Distance(3.5, "km"),
@@ -27,7 +27,7 @@ class ItineraryTests(unittest.TestCase):
             difficulty="moderate",
         )
 
-        self.third_trail = Trail(
+        self.third_trail = DayHike(
             trail_id=203,
             name="Summit Path",
             distance=Distance(4.5, "km"),
@@ -79,7 +79,7 @@ class ItineraryTests(unittest.TestCase):
         self.assertEqual(len(itinerary), 1)
 
     def test_mixed_units_are_converted_for_total(self) -> None:
-        kilometre_trail = Trail(
+        kilometre_trail = DayHike(
             trail_id=204,
             name="Forest Path",
             distance=Distance(1.609344, "km"),
@@ -87,7 +87,8 @@ class ItineraryTests(unittest.TestCase):
             difficulty="easy",
         )
 
-        mile_trail = Trail(
+
+        mile_trail = DayHike(
             trail_id=205,
             name="Creek Loop",
             distance=Distance(1, "mi"),
