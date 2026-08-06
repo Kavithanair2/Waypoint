@@ -4,12 +4,12 @@ Distance value type for the Waypoint domain model.
 
 import math
 
+
 class Distance:
     """Represent a non-negative distance measured in kilometres or miles."""
 
     VALID_UNITS = ("km", "mi")
     KM_PER_MILE = 1.609344
-
 
     def __init__(self, magnitude: float, unit: str) -> None:
         self._magnitude = self.validate_magnitude(magnitude)
@@ -19,7 +19,6 @@ class Distance:
     def magnitude(self) -> float:
         """Return the distance magnitude as a read-only value."""
         return self._magnitude
-
 
     @property
     def unit(self) -> str:
@@ -50,7 +49,6 @@ class Distance:
 
         return normalized_unit
 
-
     def convert(self, target_unit: str) -> "Distance":
         """Return a new Distance converted to the requested unit."""
         normalized_target = self.validate_unit(target_unit)
@@ -63,9 +61,7 @@ class Distance:
         else:
             converted_magnitude = self.magnitude * self.KM_PER_MILE
 
-
         return Distance(converted_magnitude, normalized_target)
-
 
     def _magnitude_in(self, unit: str) -> float:
         """Return this distance's magnitude expressed in the given unit."""
@@ -78,7 +74,6 @@ class Distance:
 
         other_magnitude = other._magnitude_in(self.unit)
         return Distance(self.magnitude + other_magnitude, self.unit)
-
 
     def __sub__(self, other: object) -> "Distance":
         """Subtract distances and return the result in the left operand's unit."""
@@ -107,7 +102,6 @@ class Distance:
             abs_tol=1e-9,
         )
 
-
     def __lt__(self, other: object) -> bool:
         """Return whether this distance is shorter than another distance."""
         if not isinstance(other, Distance):
@@ -125,7 +119,6 @@ class Distance:
     def __str__(self) -> str:
         """Return a readable distance for users."""
         return f"{self.magnitude:g} {self.unit}"
-
 
     def __repr__(self) -> str:
         """Return an unambiguous developer representation."""
