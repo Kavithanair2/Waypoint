@@ -1,21 +1,21 @@
-"""Unit tests for the Week 7 Waypoint Trail entity."""
+"""Unit tests for the Waypoint Trail abstract base class."""
 
 import unittest
 
 from waypoint_core.distance import Distance
 from waypoint_core.trail import Trail
-
+from waypoint_core.trail_types import DayHike
 
 
 class TrailTests(unittest.TestCase):
-    """Test Trail construction, validation, equality, and class state."""
+    """Test Trail validation, equality, class state, and abstraction."""
 
     def setUp(self) -> None:
         """Reset shared class state before every test."""
         Trail.set_default_unit("km")
 
     def test_from_dict_populates_trail_correctly(self) -> None:
-        trail = Trail.from_dict(
+        trail = DayHike.from_dict(
             {
                 "id": 101,
                 "name": "Maple Lookout",
@@ -26,7 +26,6 @@ class TrailTests(unittest.TestCase):
             }
         )
 
-
         self.assertEqual(trail.trail_id, 101)
         self.assertEqual(trail.name, "Maple Lookout")
         self.assertEqual(trail.distance.magnitude, 8.4)
@@ -36,7 +35,7 @@ class TrailTests(unittest.TestCase):
 
     def test_invalid_difficulty_raises_value_error(self) -> None:
         with self.assertRaises(ValueError):
-            Trail(
+            DayHike(
                 trail_id=102,
                 name="Granite Pass",
                 distance=Distance(12, "km"),
@@ -45,7 +44,7 @@ class TrailTests(unittest.TestCase):
             )
 
     def test_set_difficulty_validates_new_value(self) -> None:
-        trail = Trail(
+        trail = DayHike(
             trail_id=103,
             name="Cedar Boardwalk",
             distance=Distance(3, "km"),
@@ -61,7 +60,7 @@ class TrailTests(unittest.TestCase):
             trail.set_difficulty("extreme")
 
     def test_trails_with_same_id_compare_equal(self) -> None:
-        first = Trail(
+        first = DayHike(
             trail_id=104,
             name="Pine Creek",
             distance=Distance(4, "km"),
@@ -69,7 +68,7 @@ class TrailTests(unittest.TestCase):
             difficulty="easy",
         )
 
-        second = Trail(
+        second = DayHike(
             trail_id=104,
             name="Different Trail Name",
             distance=Distance(20, "mi"),
@@ -80,7 +79,7 @@ class TrailTests(unittest.TestCase):
         self.assertEqual(first, second)
 
     def test_trails_with_different_ids_do_not_compare_equal(self) -> None:
-        first = Trail(
+        first = DayHike(
             trail_id=105,
             name="River Bend",
             distance=Distance(5, "km"),
@@ -88,7 +87,7 @@ class TrailTests(unittest.TestCase):
             difficulty="easy",
         )
 
-        second = Trail(
+        second = DayHike(
             trail_id=106,
             name="River Bend",
             distance=Distance(5, "km"),
@@ -98,9 +97,8 @@ class TrailTests(unittest.TestCase):
 
         self.assertNotEqual(first, second)
 
-
     def test_default_unit_affects_future_trails_only(self) -> None:
-        first = Trail.from_dict(
+        first = DayHike.from_dict(
             {
                 "id": 107,
                 "name": "Aspen Walk",
@@ -112,7 +110,7 @@ class TrailTests(unittest.TestCase):
 
         Trail.set_default_unit("mi")
 
-        second = Trail.from_dict(
+        second = DayHike.from_dict(
             {
                 "id": 108,
                 "name": "Lake Ridge",
@@ -134,8 +132,31 @@ class TrailTests(unittest.TestCase):
         }
 
         with self.assertRaises(ValueError):
-            Trail.from_dict(incomplete_data)
+            DayHike.from_dict(incomplete_data)
 
+    def test_trail_cannot_be_instantiated_directly(self) -> None:
+        with self.assertRaises(TypeError):
+            Trail(
+                trail_id=110,
+                name="Abstract Trail",
+                distance=Distance(5, "km"),
+                elevation_gain_m=100,
+                difficulty="easy",
+            )
+
+    def test_incomplete_subclass_cannot_be_instantiated(self) -> None:
+        class IncompleteTrail(Trail):
+            def estimated_time(self) -> float:
+                return 1.0
+
+        with self.assertRaises(TypeError):
+            IncompleteTrail(
+                trail_id=111,
+                name="Incomplete Trail",
+                distance=Distance(5, "km"),
+                elevation_gain_m=100,
+                difficulty="easy",
+            )
 
 
 if __name__ == "__main__":

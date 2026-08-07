@@ -63,15 +63,21 @@ Waypoint/
 │   ├── __init__.py
 │   ├── distance.py
 │   ├── itinerary.py
-│   └── trail.py
+│   ├── mixins.py
+│   ├── reporting.py
+│   ├── trail.py
+│   └── trail_types.py
 └── tests/
     ├── __init__.py
     ├── test_distance.py
     ├── test_itinerary.py
-    └── test_trail.py
+    ├── test_mixins.py
+    ├── test_reporting.py
+    ├── test_trail.py
+    └── test_trail_types.py
 ```
 
-## Run the Week 7 tests
+## Run the tests
 
 Open Terminal in the repository root and run:
 
@@ -82,7 +88,7 @@ python3 -m unittest discover -s tests -v
 A successful run should finish with:
 
 ```text
-Ran 18 tests
+Ran 45 tests
 
 OK
 ```
@@ -96,8 +102,67 @@ OK
 - Each Itinerary creates its own internal list, avoiding shared mutable default arguments.
 - Mixed-unit itinerary totals convert every trail into one selected unit before adding the values.
 
+
+## Week 8 enhancements
+
+### Distance operators
+
+`Distance` now supports:
+
+- Addition and subtraction
+- Mixed-unit arithmetic using the left operand’s unit
+- Equality across kilometres and miles
+- Less-than and greater-than comparisons
+- Sorting collections of distances
+- User-readable and developer-readable string representations
+
+### Trail hierarchy
+
+`Trail` is now an abstract base class, so it cannot be created directly. Each trail type defines its own estimated_time() and summary() methods.
+
+The trail classes include:
+
+- `DayHike`
+- `BackpackingRoute`
+- `TrailRun`
+- `GuidedDayHike`, which extends `DayHike`
+- `ManagedDayHike`, which combines two mixins with `DayHike`
+
+`BackpackingRoute` overrides `packing_list()` and calls `super()` so that common trail equipment is preserved before backpacking equipment is added.
+
+### Mixins and method-resolution order
+
+The reusable mixins are:
+
+- `PermitRequiredMixin`
+- `SeasonalAccessMixin`
+
+`ManagedDayHike` uses both mixins. Its method-resolution order is:
+
+```text
+ManagedDayHike
+SeasonalAccessMixin
+PermitRequiredMixin
+DayHike
+Trail
+ABC
+object
+```
+
+Each mixin uses `super().summary()` to add its own information while keeping the summary created by the other classes.
+
+### Polymorphism and duck typing
+
+`build_trail_report()` loops through trail-like objects and calls:
+
+- `summary()`
+- `estimated_time()`
+
+The reporting function works with the real trail subclasses and with a test `FakeTrail` that does not inherit from `Trail`. This shows duck typing because `FakeTrail` works as long as it has the required methods, even though it does not inherit from Trail.
+
+
 ## Current project status
 
-Week 7 domain implementation is complete locally.
+The Week 8 features and related tests are now complete locally.
 
-The GitHub pull request, review, merge and `v7` tag remain manual workflow steps.
+The GitHub pull request, review, merge, and `v8` tag remain manual workflow steps.
