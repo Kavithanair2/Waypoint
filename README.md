@@ -1,89 +1,161 @@
 # Waypoint
 
-Waypoint is a trail-finder and trip-planner project developed with Python and Django.
+Waypoint is my individual term project for Application Programming.
 
-The project begins with a pure-Python domain engine and will later be expanded into a Django web application.
+I began the project as a pure-Python object-oriented domain engine and am developing it into a Django trail-finder and
+trip-planner website.
 
-## Week 7 domain model
+## Current development stage
 
-The Week 7 implementation includes three main classes:
+Week 9 — Django project setup.
 
-### Distance
+## Current features
 
-Distance represents a non-negative distance measured in kilometres or miles.
+### Domain engine
 
-It provides:
+The current Python domain engine includes:
 
-- Magnitude and unit validation
-- Read-only `magnitude` and `unit` properties
-- Conversion between kilometres and miles
-- Rejection of negative distances and unsupported units
+- Distance validation, unit conversion, arithmetic, and comparisons
+- An abstract trail hierarchy with different trail types
+- Method overriding and use of `super()`
+- Mixins and multiple inheritance
+- Polymorphism and duck typing
+- Itinerary management and total-distance calculation
+- Automated domain tests
 
-### Trail
+### Django setup
 
-Trail represents an individual trail.
+The project currently includes:
 
-It provides:
+- A virtual environment named `env`
+- Django 4.2
+- The `waypoint` Django project
+- SQLite for local development
+- An importable `waypoint_core` package
+- A working Django development server
 
-- A unique trail ID
-- A name
-- A Distance object
-- Elevation gain in metres
-- A validated difficulty
-- A default-unit class variable
-- A `from_dict()` alternate constructor
-- Static validation methods
-- Equality based on trail ID
-
-Allowed difficulty values are:
-
-- easy
-- moderate
-- hard
-- expert
-
-### Itinerary
-
-Itinerary contains an ordered collection of Trail objects.
-
-It provides:
-
-- `add_trail()` for adding trails
-- Independent trail lists for each itinerary
-- Total-distance calculation
-- Conversion of mixed units into a selected unit
-- Protection against adding non-Trail objects
+My local Week 9 environment was verified using Python 3.12.13 and Django 4.2.30.
 
 ## Project structure
 
 ```text
 Waypoint/
+├── .gitignore
 ├── README.md
-├── waypoint_core/
+├── manage.py
+├── requirements.txt
+├── tests/
 │   ├── __init__.py
-│   ├── distance.py
-│   ├── itinerary.py
-│   ├── mixins.py
-│   ├── reporting.py
-│   ├── trail.py
-│   └── trail_types.py
-└── tests/
+│   ├── test_distance.py
+│   ├── test_itinerary.py
+│   ├── test_mixins.py
+│   ├── test_reporting.py
+│   ├── test_trail.py
+│   └── test_trail_types.py
+├── waypoint/
+│   ├── __init__.py
+│   ├── asgi.py
+│   ├── settings.py
+│   ├── urls.py
+│   └── wsgi.py
+└── waypoint_core/
     ├── __init__.py
-    ├── test_distance.py
-    ├── test_itinerary.py
-    ├── test_mixins.py
-    ├── test_reporting.py
-    ├── test_trail.py
-    └── test_trail_types.py
+    ├── distance.py
+    ├── itinerary.py
+    ├── mixins.py
+    ├── reporting.py
+    ├── trail.py
+    └── trail_types.py
 ```
 
-## Run the tests
+## Python and Django versions
 
-Open Terminal in the repository root and run:
+I use Python 3.12 because it is compatible with the required Django 4.2 release.
+
+The `requirements.txt` file contains:
+
+```text
+Django>=4.2,<4.3
+```
+
+## Setup from a fresh clone
+
+Clone the repository and enter the project folder:
 
 ```bash
-python3 -m unittest discover -s tests -v
+git clone https://github.com/Kavithanair2/Waypoint.git
+cd Waypoint
 ```
+
+Confirm that Python 3.12 is active:
+
+```bash
+python --version
+```
+
+Create the required virtual environment:
+
+```bash
+python -m venv env
+```
+
+Activate the virtual environment on macOS:
+
+```bash
+source env/bin/activate
+```
+
+On Windows PowerShell:
+
+```powershell
+.\env\Scripts\Activate.ps1
+```
+
+Install the project requirements:
+
+```bash
+python -m pip install -r requirements.txt
+```
+
+Apply the Django migrations:
+
+```bash
+python manage.py migrate
+```
+
+Check the Django configuration:
+
+```bash
+python manage.py check
+```
+
+Start the Django development server:
+
+```bash
+python manage.py runserver
+```
+
+Open the following address in a browser:
+
+```text
+http://127.0.0.1:8000/
+```
+
+At the current development stage, Django's default welcome page should load.
+
+Stop the development server by pressing `Control + C` in the Terminal.
+
+## Run the domain tests
+
+The pure-Python tests are stored in the top-level `tests` directory.
+
+Run them from the repository root:
+
+```bash
+python -m unittest discover -s tests -v
+```
+
+The current domain test suite contains 45 tests.
 
 A successful run should finish with:
 
@@ -93,51 +165,104 @@ Ran 45 tests
 OK
 ```
 
-## Week 7 design decisions
+## Verify the domain package
 
-- Distance conversion returns a new object instead of modifying the original Distance.
-- Trail difficulty is changed through `set_difficulty()` so invalid values cannot be assigned.
-- Trail equality uses `trail_id` because the ID represents trail identity.
-- `Trail.from_dict()` uses the current default unit when the dictionary does not include a unit.
-- Each Itinerary creates its own internal list, avoiding shared mutable default arguments.
-- Mixed-unit itinerary totals convert every trail into one selected unit before adding the values.
+The domain engine is stored in the `waypoint_core` package so that it can be reused by the Django application in later
+parts of the project.
 
+With the virtual environment active, run:
 
-## Week 8 enhancements
+```bash
+python -c "import waypoint_core"
+```
 
-### Distance operators
+A successful import returns to the command prompt without an error.
 
-`Distance` now supports:
+## Verify virtual-environment isolation
 
-- Addition and subtraction
-- Mixed-unit arithmetic using the left operand’s unit
-- Equality across kilometres and miles
-- Less-than and greater-than comparisons
-- Sorting collections of distances
-- User-readable and developer-readable string representations
+The Django installation should only be available inside the project virtual environment.
+
+Deactivate the virtual environment:
+
+```bash
+deactivate
+```
+
+Then run:
+
+```bash
+django-admin --version
+```
+
+If Django is isolated correctly, `django-admin` should not be available outside the virtual environment.
+
+Reactivate the environment on macOS with:
+
+```bash
+source env/bin/activate
+```
+
+## Domain design
+
+### Distance
+
+`Distance` represents a non-negative distance in kilometres or miles. It supports validation, unit conversion,
+arithmetic, comparisons, and sorting.
+
+For mixed-unit arithmetic, I convert the right-hand distance to the unit of the left-hand `Distance` before performing the
+calculation.
+
+For example:
+
+```text
+Distance(5, "km") + Distance(1, "mi") → result in kilometres
+Distance(5, "mi") + Distance(1, "km") → result in miles
+```
+
+Equality and ordering also account for different units.
+
+Subtraction raises `ValueError` if the result would be negative.
 
 ### Trail hierarchy
 
-`Trail` is now an abstract base class, so it cannot be created directly. Each trail type defines its own estimated_time() and summary() methods.
+`Trail` is an abstract base class that defines the common behaviour for the different trail types.
 
-The trail classes include:
+The current hierarchy is:
 
-- `DayHike`
-- `BackpackingRoute`
-- `TrailRun`
-- `GuidedDayHike`, which extends `DayHike`
-- `ManagedDayHike`, which combines two mixins with `DayHike`
+```text
+Trail
+├── DayHike
+│   ├── GuidedDayHike
+│   └── ManagedDayHike
+├── BackpackingRoute
+└── TrailRun
+```
 
-`BackpackingRoute` overrides `packing_list()` and calls `super()` so that common trail equipment is preserved before backpacking equipment is added.
+Each concrete trail type provides its own `estimated_time()` and `summary()` behaviour.
 
-### Mixins and method-resolution order
+`GuidedDayHike` extends `DayHike` and inherits its existing behaviour.
 
-The reusable mixins are:
+`BackpackingRoute` overrides `packing_list()` and uses `super()` to keep the common trail equipment before adding the
+extra items needed for backpacking.
 
-- `PermitRequiredMixin`
-- `SeasonalAccessMixin`
+### Itinerary
 
-`ManagedDayHike` uses both mixins. Its method-resolution order is:
+`Itinerary` stores an ordered collection of trails and calculates their total distance.
+
+Each itinerary keeps its own internal trail list, so adding a trail to one itinerary does not affect another.
+
+### Other domain rules
+
+- Trail difficulty is checked against the allowed difficulty values.
+- Two trails are considered equal when they have the same `trail_id`.
+- `Trail.from_dict()` can be used to create a trail from dictionary data.
+- `Trail` keeps a class-level default distance unit and uses static methods for validation.
+
+### Mixins and polymorphism
+
+`ManagedDayHike` combines `PermitRequiredMixin` and `SeasonalAccessMixin` with `DayHike`.
+Because `ManagedDayHike` uses multiple inheritance, Python follows this method resolution order (MRO):
+
 
 ```text
 ManagedDayHike
@@ -149,20 +274,108 @@ ABC
 object
 ```
 
-Each mixin uses `super().summary()` to add its own information while keeping the summary created by the other classes.
+The reporting function processes different trail types through the same `summary()` and `estimated_time()` methods.
 
-### Polymorphism and duck typing
+A `FakeTrail` that does not inherit from `Trail` is also used in testing. This demonstrates duck typing because the
+reporting function works as long as the object provides the required methods.
 
-`build_trail_report()` loops through trail-like objects and calls:
+## Estimated-time calculations
 
-- `summary()`
-- `estimated_time()`
+### DayHike
 
-The reporting function works with the real trail subclasses and with a test `FakeTrail` that does not inherit from `Trail`. This shows duck typing because `FakeTrail` works as long as it has the required methods, even though it does not inherit from Trail.
+I calculate the estimated time for a `DayHike` using a hiking pace of 4 km/h and add one hour for every 600 metres of elevation gain.
 
+### BackpackingRoute
+
+I calculate the estimated time for a `BackpackingRoute` using a hiking pace of 3 km/h, adding one hour for every 500 metres of elevation gain and 30 minutes for each overnight stop.
+
+### TrailRun
+
+I calculate the estimated time for a `TrailRun` using a running pace of 8 km/h and add one hour for every 800 metres of elevation gain.
+
+### GuidedDayHike
+
+`GuidedDayHike` inherits the `DayHike` estimated-time calculation. I added guide information to the subclass without changing the time calculation.
+
+## Django project files
+
+The Django `startproject` command created the main `waypoint` project package.
+
+The main generated files are:
+
+- `manage.py` — runs Django management commands such as migrations and the development server.
+- `waypoint/settings.py` — contains the main Django project configuration.
+- `waypoint/urls.py` — contains the project's URL routing.
+- `waypoint/wsgi.py` — provides the WSGI application entry point.
+- `waypoint/asgi.py` — provides the ASGI application entry point.
+- `waypoint/__init__.py` — makes the `waypoint` directory a Python package.
+
+I kept the Django project separate from `waypoint_core` so that the existing Python domain logic can be reused by the
+web application.
+
+## Git ignored files
+
+The `.gitignore` currently excludes:
+
+```text
+env/
+db.sqlite3
+__pycache__/
+```
+
+The virtual environment contains locally installed packages, while `db.sqlite3` is the local development database. These
+files do not need to be stored in the repository.
+
+## Troubleshooting
+
+### Django is unavailable
+
+Make sure the virtual environment is active.
+
+On macOS:
+
+```bash
+source env/bin/activate
+```
+
+The Terminal prompt should normally begin with:
+
+```text
+(env)
+```
+
+Check the installed Django version:
+
+```bash
+python -m django --version
+```
+
+### `ModuleNotFoundError: waypoint_core`
+
+Make sure the command is being run from the repository root.
+
+Verify the package with:
+
+```bash
+python -c "import waypoint_core"
+```
+
+A successful command returns without an error.
+
+### Database has not been initialized
+
+Run:
+
+```bash
+python manage.py migrate
+```
+
+This applies Django's migrations and creates the local SQLite database.
 
 ## Current project status
 
-The Week 8 features and related tests are now complete locally.
+The Week 7 domain model and the Week 8 inheritance, polymorphism, mixins, and operator features are complete and merged.
 
-The GitHub pull request, review, merge, and `v8` tag remain manual workflow steps.
+For Week 9, I created the Django 4.2 project and verified that it runs inside the isolated `env` virtual environment. Migrations run successfully, `waypoint_core` remains importable, and the development server loads the Django welcome page.
+
+The fresh-clone verification and remaining Week 9 Git workflow still need to be completed before Week 9 is finished.
