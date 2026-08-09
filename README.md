@@ -378,4 +378,4 @@ The Week 7 domain model and the Week 8 inheritance, polymorphism, mixins, and op
 
 For Week 9, I created the Django 4.2 project and verified that it runs inside the isolated `env` virtual environment. Migrations run successfully, `waypoint_core` remains importable, and the development server loads the Django welcome page.
 
-The fresh-clone verification and remaining Week 9 Git workflow still need to be completed before Week 9 is finished.
+The Week 9 setup and fresh-clone verification are complete.
