@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <title>Report a Trail | Waypoint</title>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
+</head>
+<body>
+    <main>
+        <h1>Report a Trail</h1>
+        <p>Share information about a trail with Waypoint.</p>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+
+        <form method="post">
+            {% csrf_token %}
+
+            <p>
+                <label for="name">Name:</label><br>
+                <input type="text" id="name" name="name" value="{{ name|default:'' }}">
+            </p>
+
+            <p>
+                <label for="email">Email:</label><br>
+                <input type="email" id="email" name="email" value="{{ email|default:'' }}">
+            </p>
+
+            <p>
+                <label for="trail">Trail:</label><br>
+                <input type="text" id="trail" name="trail" value="{{ trail|default:'' }}">
+            </p>
+
+            <p>
+                <label for="note">Note:</label><br>
+                <textarea id="note" name="note" rows="5">{{ note|default:'' }}</textarea>
+            </p>
+
+            <button type="submit">Submit Report</button>
+        </form>
+    </main>
+</body>
+</html>
