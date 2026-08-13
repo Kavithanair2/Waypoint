@@ -7,7 +7,7 @@ trip-planner website.
 
 ## Current development stage
 
-Week 9 — Django project setup.
+Week 10 — Django pages, URLs, and trail-report form.
 
 ## Current features
 
@@ -34,7 +34,22 @@ The project currently includes:
 - An importable `waypoint_core` package
 - A working Django development server
 
-My local Week 9 environment was verified using Python 3.12.13 and Django 4.2.30.
+### Week 10 web features
+
+The Django website currently includes:
+
+- A styled Waypoint homepage
+- A greeting passed to the homepage through a context variable
+- Project-level templates and static CSS
+- A trail-report form with name, email, trail, and note fields
+- CSRF protection for the report form
+- A personalized thank-you page after a successful report
+- Server-side validation that rejects an empty or whitespace-only note
+- A friendly validation error that keeps the previously entered form values
+- A search page that safely reads the `q` query parameter
+- Home, report, and search URL routes
+
+My local environment was verified using Python 3.12.13 and Django 4.2.30.
 
 ## Project structure
 
@@ -44,6 +59,13 @@ Waypoint/
 ├── README.md
 ├── manage.py
 ├── requirements.txt
+├── static/
+│   └── style.css
+├── templates/
+│   ├── home.html
+│   ├── report.html
+│   ├── search.html
+│   └── thank_you.html
 ├── tests/
 │   ├── __init__.py
 │   ├── test_distance.py
@@ -57,6 +79,7 @@ Waypoint/
 │   ├── asgi.py
 │   ├── settings.py
 │   ├── urls.py
+│   ├── views.py
 │   └── wsgi.py
 └── waypoint_core/
     ├── __init__.py
@@ -141,9 +164,17 @@ Open the following address in a browser:
 http://127.0.0.1:8000/
 ```
 
-At the current development stage, Django's default welcome page should load.
+At the current development stage, the Waypoint homepage should load with the "Welcome to Waypoint" heading.
 
 Stop the development server by pressing `Control + C` in the Terminal.
+
+## Website routes
+
+- `/` — displays the Waypoint homepage.
+- `/report/` — displays the trail-report form.
+- `/search/` — displays the trail search page.
+- `/search/?q=Pine` — shows the submitted search query.
+- `/admin/` — displays the Django administration login page.
 
 ## Run the domain tests
 
@@ -266,12 +297,12 @@ Because `ManagedDayHike` uses multiple inheritance, Python follows this method r
 
 ```text
 ManagedDayHike
-SeasonalAccessMixin
-PermitRequiredMixin
-DayHike
-Trail
-ABC
-object
+→ SeasonalAccessMixin
+→ PermitRequiredMixin
+→ DayHike
+→ Trail
+→ ABC
+→ object
 ```
 
 The reporting function processes different trail types through the same `summary()` and `estimated_time()` methods.
@@ -309,6 +340,16 @@ The main generated files are:
 - `waypoint/wsgi.py` — provides the WSGI application entry point.
 - `waypoint/asgi.py` — provides the ASGI application entry point.
 - `waypoint/__init__.py` — makes the `waypoint` directory a Python package.
+
+The Week 10 web files include:
+
+- `waypoint/views.py` — contains the home, report, and search view functions.
+- `templates/home.html` — displays the Waypoint homepage and context-variable greeting.
+- `templates/report.html` — displays and submits the trail-report form with CSRF protection.
+- `templates/thank_you.html` — displays the personalized report confirmation.
+- `templates/search.html` — displays the trail search form and query.
+- `static/style.css` — provides the shared Week 10 page styling.
+
 
 I kept the Django project separate from `waypoint_core` so that the existing Python domain logic can be reused by the
 web application.
@@ -372,10 +413,24 @@ python manage.py migrate
 
 This applies Django's migrations and creates the local SQLite database.
 
+### `TemplateDoesNotExist`
+
+Confirm that `waypoint/settings.py` contains the project-level template directory and that the required HTML file exists inside `templates/`.
+
+### Report form returns `403 Forbidden`
+
+Confirm that the POST form contains:
+
+```django
+{% csrf_token %}
+```
+
 ## Current project status
 
 The Week 7 domain model and the Week 8 inheritance, polymorphism, mixins, and operator features are complete and merged.
 
-For Week 9, I created the Django 4.2 project and verified that it runs inside the isolated `env` virtual environment. Migrations run successfully, `waypoint_core` remains importable, and the development server loads the Django welcome page.
+For Week 9, I created the Django 4.2 project and verified that it runs inside the isolated `env` virtual environment. The fresh-clone setup was also verified.
 
-The Week 9 setup and fresh-clone verification are complete.
+For Week 10, I added the Waypoint homepage, project-level templates and static CSS, the trail-report form, CSRF protection, a personalized thank-you page, and a safe search view. I also completed the optional server-side validation that rejects an empty or whitespace-only note and shows a friendly error.
+
+The Week 10 pages were tested in the browser, Django's system check passed, and all 45 existing domain tests still pass.
