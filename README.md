@@ -7,7 +7,18 @@ trip-planner website.
 
 ## Current development stage
 
-Week 10 — Django pages, URLs, and trail-report form.
+Week 11 – Shared templates and trail catalog.
+
+## Technology
+
+Waypoint currently uses:
+
+- Python 3.12
+- Django 4.2
+- HTML
+- CSS
+- SQLite for local development
+- Git and GitHub
 
 ## Current features
 
@@ -49,7 +60,19 @@ The Django website currently includes:
 - A search page that safely reads the `q` query parameter
 - Home, report, and search URL routes
 
-My local environment was verified using Python 3.12.13 and Django 4.2.30.
+### Week 11 web features
+
+The Django website now also includes:
+
+- A shared `base.html` layout
+- Reusable navbar and footer partials
+- Home, report, search, and thank-you pages that extend the shared base template
+- A trail catalog with six trails
+- Automatic row numbering using `forloop.counter`
+- Trail status and difficulty labels using template conditionals
+- Distance formatting using `floatformat:1`
+- A shared Catalog link in the navigation
+
 
 ## Project structure
 
@@ -62,7 +85,12 @@ Waypoint/
 ├── static/
 │   └── style.css
 ├── templates/
+│   ├── base.html
+│   ├── catalog.html
 │   ├── home.html
+│   ├── partials/
+│   │   ├── footer.html
+│   │   └── navbar.html
 │   ├── report.html
 │   ├── search.html
 │   └── thank_you.html
@@ -103,6 +131,7 @@ Django>=4.2,<4.3
 
 ## Setup from a fresh clone
 
+The following steps are written primarily for macOS and can be used to set up and run Waypoint from a fresh clone. A Windows PowerShell activation command is also included where it differs.
 Clone the repository and enter the project folder:
 
 ```bash
@@ -111,7 +140,6 @@ cd Waypoint
 ```
 
 Confirm that Python 3.12 is active:
-
 ```bash
 python --version
 ```
@@ -170,11 +198,12 @@ Stop the development server by pressing `Control + C` in the Terminal.
 
 ## Website routes
 
-- `/` — displays the Waypoint homepage.
-- `/report/` — displays the trail-report form.
-- `/search/` — displays the trail search page.
-- `/search/?q=Pine` — shows the submitted search query.
-- `/admin/` — displays the Django administration login page.
+- `/` – Waypoint homepage
+- `/report/` – trail-report form
+- `/search/` – trail search
+- `/search/?q=Pine` – example search query
+- `/catalog/` – trail catalog
+- `/admin/` – Django administration login
 
 ## Run the domain tests
 
@@ -350,6 +379,14 @@ The Week 10 web files include:
 - `templates/search.html` — displays the trail search form and query.
 - `static/style.css` — provides the shared Week 10 page styling.
 
+The Week 11 web files include:
+
+- `templates/base.html` – provides the shared page layout.
+- `templates/partials/navbar.html` – provides the shared navigation links.
+- `templates/partials/footer.html` – provides the shared footer.
+- `templates/catalog.html` – displays the trail catalog using template loops, conditionals, and filters.
+- `waypoint/views.py` – now also provides the catalog view and trail data.
+- `waypoint/urls.py` – now also includes the catalog URL route.
 
 I kept the Django project separate from `waypoint_core` so that the existing Python domain logic can be reused by the
 web application.
@@ -366,6 +403,34 @@ __pycache__/
 
 The virtual environment contains locally installed packages, while `db.sqlite3` is the local development database. These
 files do not need to be stored in the repository.
+
+## Current project status
+
+Weeks 7 through 11 are complete. The Week 11 pages were tested in the browser, Django's system check passed, and all 45 domain tests still pass.
+
+## Git workflow
+
+I develop each project week on a separate feature branch and merge the completed work into `main`.
+
+Completed milestone branches include:
+
+```text
+week-07-domain-model
+week-08-hierarchy-and-operators
+week-09-django-setup
+week-10-views-urls-forms
+week-11-template-language
+```
+
+Completed milestone tags include:
+
+```text
+v7
+v8
+v9
+v10
+v11
+```
 
 ## Troubleshooting
 
@@ -390,8 +455,9 @@ Check the installed Django version:
 ```bash
 python -m django --version
 ```
-
-### `ModuleNotFoundError: waypoint_core`
+```markdown
+### ModuleNotFoundError: waypoint_core
+```
 
 Make sure the command is being run from the repository root.
 
@@ -424,13 +490,3 @@ Confirm that the POST form contains:
 ```django
 {% csrf_token %}
 ```
-
-## Current project status
-
-The Week 7 domain model and the Week 8 inheritance, polymorphism, mixins, and operator features are complete and merged.
-
-For Week 9, I created the Django 4.2 project and verified that it runs inside the isolated `env` virtual environment. The fresh-clone setup was also verified.
-
-For Week 10, I added the Waypoint homepage, project-level templates and static CSS, the trail-report form, CSRF protection, a personalized thank-you page, and a safe search view. I also completed the optional server-side validation that rejects an empty or whitespace-only note and shows a friendly error.
-
-The Week 10 pages were tested in the browser, Django's system check passed, and all 45 existing domain tests still pass.
