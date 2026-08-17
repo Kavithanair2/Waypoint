@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}{{ trail.name }} | Waypoint{% endblock %}
+
+{% block content %}
+    <h1>{{ trail.name }}</h1>
+
+    <p><strong>Distance:</strong> {{ trail.distance_km|floatformat:1 }} km</p>
+    <p><strong>Elevation gain:</strong> {{ trail.elevation_gain }} m</p>
+    <p><strong>Difficulty:</strong> {{ trail.get_difficulty_display }}</p>
+    <p><strong>Estimated time:</strong> {{ estimated_time|floatformat:1 }} hours</p>
+
+    <p>
+        <a href="{% url 'trail_catalog' %}">Back to trail catalog</a>
+    </p>
+{% endblock %}
