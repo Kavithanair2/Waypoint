@@ -7,7 +7,7 @@ trip-planner website.
 
 ## Current development stage
 
-Week 11 – Shared templates and trail catalog.
+Week 12 – Django ORM, database-backed trails, and Admin.
 
 ## Technology
 
@@ -73,6 +73,20 @@ The Django website now also includes:
 - Distance formatting using `floatformat:1`
 - A shared Catalog link in the navigation
 
+### Week 12 database and ORM features
+
+The Django website now also includes:
+
+- A `trails` Django app for managing trail data
+- A database-backed `Trail` model with distance, elevation, difficulty, open status, and date-added fields
+- An initial migration that creates the Trail database schema
+- Django Admin support for adding, editing, searching, and viewing trails
+- A `/trails/` catalog that uses the Django ORM to display only open trails
+- Trail results ordered by distance
+- Reuse of the existing Week 11 catalog template with Django model instances
+- An optional `/trails/<id>/` detail page
+- Reuse of the Week 8 `DayHike.estimated_time()` method to display an estimated hiking time
+
 
 ## Project structure
 
@@ -93,7 +107,8 @@ Waypoint/
 │   │   └── navbar.html
 │   ├── report.html
 │   ├── search.html
-│   └── thank_you.html
+│   ├── thank_you.html
+│   └── trail_detail.html
 ├── tests/
 │   ├── __init__.py
 │   ├── test_distance.py
@@ -102,6 +117,17 @@ Waypoint/
 │   ├── test_reporting.py
 │   ├── test_trail.py
 │   └── test_trail_types.py
+├── trails/
+│   ├── __init__.py
+│   ├── admin.py
+│   ├── apps.py
+│   ├── migrations/
+│   │   ├── __init__.py
+│   │   └── 0001_initial.py
+│   ├── models.py
+│   ├── tests.py
+│   ├── urls.py
+│   └── views.py
 ├── waypoint/
 │   ├── __init__.py
 │   ├── asgi.py
@@ -202,7 +228,9 @@ Stop the development server by pressing `Control + C` in the Terminal.
 - `/report/` – trail-report form
 - `/search/` – trail search
 - `/search/?q=Pine` – example search query
-- `/catalog/` – trail catalog
+- `/catalog/` – Week 11 data-driven trail catalog
+- `/trails/` – database-backed trail catalog showing open trails
+- `/trails/<id>/` – individual trail detail page with an estimated hiking time
 - `/admin/` – Django administration login
 
 ## Run the domain tests
@@ -388,6 +416,17 @@ The Week 11 web files include:
 - `waypoint/views.py` – now also provides the catalog view and trail data.
 - `waypoint/urls.py` – now also includes the catalog URL route.
 
+The Week 12 Django files include:
+
+- `trails/models.py` – defines the database-backed `Trail` model.
+- `trails/migrations/0001_initial.py` – creates the initial Trail database schema.
+- `trails/admin.py` – registers `TrailAdmin` with list and search options.
+- `trails/views.py` – provides the database-backed catalog and trail detail views.
+- `trails/urls.py` – contains the `/trails/` app routes.
+- `templates/trail_detail.html` – displays an individual trail and its estimated hiking time.
+- `waypoint/settings.py` – registers the `trails` app in `INSTALLED_APPS`.
+- `waypoint/urls.py` – mounts the `trails` app using `include()`.
+
 I kept the Django project separate from `waypoint_core` so that the existing Python domain logic can be reused by the
 web application.
 
@@ -406,7 +445,8 @@ files do not need to be stored in the repository.
 
 ## Current project status
 
-Weeks 7 through 11 are complete. The Week 11 pages were tested in the browser, Django's system check passed, and all 45 domain tests still pass.
+Weeks 7 through 12 are complete. The Week 12 ORM and Admin features were tested in the browser, Django's system check passed, and all 45 existing domain tests still pass.
+A fresh clone was also tested successfully by applying the committed migrations and confirming that the Trail database table was created.
 
 ## Git workflow
 
@@ -420,6 +460,7 @@ week-08-hierarchy-and-operators
 week-09-django-setup
 week-10-views-urls-forms
 week-11-template-language
+week-12-orm-and-admin
 ```
 
 Completed milestone tags include:
@@ -430,6 +471,7 @@ v8
 v9
 v10
 v11
+v12
 ```
 
 ## Troubleshooting
