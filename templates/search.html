@@ -1,26 +1,19 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <title>Search | Waypoint</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-</head>
-<body>
-    <main>
-        <h1>Search Trails</h1>
+{% extends "base.html" %}
 
-        <form method="get">
-            <label for="q">Search:</label>
-            <input type="text" id="q" name="q" value="{{ query }}">
-            <button type="submit">Search</button>
-        </form>
+{% block title %}Search | Waypoint{% endblock %}
 
-        {% if query %}
-            <p>You searched for: {{ query }}</p>
-        {% else %}
-            <p>Enter a trail name to search.</p>
-        {% endif %}
-    </main>
-</body>
-</html>
+{% block content %}
+    <h1>Search Trails</h1>
+
+    <form method="get">
+        <label for="q">Search:</label>
+        <input type="text" id="q" name="q" value="{{ query }}">
+        <button type="submit">Search</button>
+    </form>
+
+    {% if query %}
+        <p>You searched for: {{ query }}</p>
+    {% else %}
+        <p>Enter a trail name to search.</p>
+    {% endif %}
+{% endblock %}

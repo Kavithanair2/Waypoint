@@ -1,45 +1,38 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <title>Report a Trail | Waypoint</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-</head>
-<body>
-    <main>
-        <h1>Report a Trail</h1>
-        <p>Share information about a trail with Waypoint.</p>
+{% extends "base.html" %}
 
-        {% if error %}
-            <p class="error">{{ error }}</p>
-        {% endif %}
+{% block title %}Report a Trail | Waypoint{% endblock %}
 
-        <form method="post">
-            {% csrf_token %}
+{% block content %}
+    <h1>Report a Trail</h1>
+    <p>Share information about a trail with Waypoint.</p>
 
-            <p>
-                <label for="name">Name:</label><br>
-                <input type="text" id="name" name="name" value="{{ name|default:'' }}">
-            </p>
+    {% if error %}
+        <p class="error">{{ error }}</p>
+    {% endif %}
 
-            <p>
-                <label for="email">Email:</label><br>
-                <input type="email" id="email" name="email" value="{{ email|default:'' }}">
-            </p>
+    <form method="post">
+        {% csrf_token %}
 
-            <p>
-                <label for="trail">Trail:</label><br>
-                <input type="text" id="trail" name="trail" value="{{ trail|default:'' }}">
-            </p>
+        <p>
+            <label for="name">Name:</label><br>
+            <input type="text" id="name" name="name" value="{{ name|default:'' }}">
+        </p>
 
-            <p>
-                <label for="note">Note:</label><br>
-                <textarea id="note" name="note" rows="5">{{ note|default:'' }}</textarea>
-            </p>
+        <p>
+            <label for="email">Email:</label><br>
+            <input type="email" id="email" name="email" value="{{ email|default:'' }}">
+        </p>
 
-            <button type="submit">Submit Report</button>
-        </form>
-    </main>
-</body>
-</html>
+        <p>
+            <label for="trail">Trail:</label><br>
+            <input type="text" id="trail" name="trail" value="{{ trail|default:'' }}">
+        </p>
+
+        <p>
+            <label for="note">Note:</label><br>
+            <textarea id="note" name="note" rows="5">{{ note|default:'' }}</textarea>
+        </p>
+
+        <button type="submit">Submit Report</button>
+    </form>
+{% endblock %}

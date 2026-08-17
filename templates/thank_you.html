@@ -1,16 +1,9 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <title>Thank You | Waypoint</title>
-    <link rel="stylesheet" href="{% static 'style.css' %}">
-</head>
-<body>
-    <main>
-        <h1>Thank you, {{ name }}!</h1>
-        <p>Your trail report has been received.</p>
-        <p>Trail: {{ trail }}</p>
-    </main>
-</body>
-</html>
+{% extends "base.html" %}
+
+{% block title %}Thank You | Waypoint{% endblock %}
+
+{% block content %}
+    <h1>Thank you, {{ name }}!</h1>
+    <p>Your trail report has been received.</p>
+    <p>Trail: {{ trail }}</p>
+{% endblock %}

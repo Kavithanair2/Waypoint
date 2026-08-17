@@ -25,3 +25,41 @@ p {
     color: #a12622;
     font-weight: bold;
 }
+
+nav {
+    padding: 15px 30px;
+    background-color: white;
+}
+
+nav a {
+    margin-right: 20px;
+    color: #2c3e2d;
+    text-decoration: none;
+}
+
+nav a:hover {
+    text-decoration: underline;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    margin-top: 30px;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+th,
+td {
+    text-align: left;
+    padding: 10px 12px;
+    border-bottom: 1px solid #dddddd;
+}
+
+th {
+    font-weight: bold;
+}
