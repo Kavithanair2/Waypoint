@@ -7,8 +7,9 @@ trip-planner website.
 
 ## Project status
 
-Waypoint is currently developed through Week 13. The latest work connects Trails and Parks using a Django `ForeignKey`.
-Parks can be managed through Django Admin, assigned to Trails, and used to display related Trail information.
+Waypoint is currently in Week 14, the final hardening and handoff stage. The latest work adds the required Django and
+domain tests, final project screenshots, and documentation updates before the clean-clone verification and final
+release.
 
 ## Technology
 
@@ -94,11 +95,7 @@ The relationship uses `SET_NULL` with `null=True` so existing Trail records coul
 immediately. It also means that if a Park is deleted, the related Trail records are preserved and their Park value
 becomes empty instead of deleting the Trails.
 
-I did not add a custom `related_name`, so Django's default reverse relation is available through:
-
-```python
-park.trail_set
-```
+I did not add a custom `related_name`, so Django's default reverse relation is available through `park.trail_set`.
 
 ## Requirements
 
@@ -122,61 +119,37 @@ cd Waypoint
 
 ### 2. Check the Python version
 
-```bash
-python --version
-```
+Run `python --version`.
 
 Python 3.12 is used for this project.
 
 ### 3. Create the virtual environment
 
-```bash
-python -m venv env
-```
+Run `python -m venv env`.
 
 ### 4. Activate the virtual environment
 
-On macOS:
+On macOS, run `source env/bin/activate`.
 
-```bash
-source env/bin/activate
-```
-
-On Windows PowerShell:
-
-```powershell
-.\env\Scripts\Activate.ps1
-```
+On Windows PowerShell, run `.\env\Scripts\Activate.ps1`.
 
 ### 5. Install the requirements
 
-```bash
-python -m pip install -r requirements.txt
-```
+Run `python -m pip install -r requirements.txt`.
 
 ### 6. Apply the migrations
 
-```bash
-python manage.py migrate
-```
+Run `python manage.py migrate`.
 
 ### 7. Check the Django configuration
 
-```bash
-python manage.py check
-```
+Run `python manage.py check`.
 
 ### 8. Start the development server
 
-```bash
-python manage.py runserver
-```
+Run `python manage.py runserver`.
 
-Open:
-
-```text
-http://127.0.0.1:8000/
-```
+Open `http://127.0.0.1:8000/` in a browser.
 
 The Waypoint homepage should load with the **Welcome to Waypoint** heading.
 
@@ -187,25 +160,11 @@ Stop the server with `Control + C`.
 A fresh clone does not include my local Django administrator account or local Trail and Park data because `db.sqlite3`
 is not stored in Git.
 
-Create a local administrator with:
-
-```bash
-python manage.py createsuperuser
-```
+Create a local administrator with `python manage.py createsuperuser`.
 
 Follow the prompts to create a username, optional email address, and password.
 
-Start the development server:
-
-```bash
-python manage.py runserver
-```
-
-Open Django Admin at:
-
-```text
-http://127.0.0.1:8000/admin/
-```
+Start the development server with `python manage.py runserver`, then open `http://127.0.0.1:8000/admin/`.
 
 Create a Park first, then create or edit Trail records and assign them to a Park. The data created through Django Admin
 is stored only in the local SQLite database.
@@ -222,39 +181,52 @@ is stored only in the local SQLite database.
 - `/trails/parks/<id>/` – park detail page showing the trails assigned to the selected park
 - `/admin/` – Django administration login
 
+## Screenshots
+
+### Trail catalog
+
+The public Trail catalog displays the open Trails stored in the database along with their Park information.
+
+![Waypoint Trail catalog](docs/screenshots/catalog.png)
+
+### Django Admin
+
+Django Admin is used to manage Trail and Park records and assign Trails to Parks.
+
+![Waypoint Django Admin](docs/screenshots/admin.png)
+
 ## Testing and verification
 
-The pure-Python test suite is stored in the top-level `tests` directory.
+Waypoint includes both pure-Python domain tests and Django tests.
 
-Run the tests from the repository root with:
+The pure-Python tests are stored in the top-level `tests` directory. Run them with:
 
 ```bash
 python -m unittest discover -s tests -v
 ```
 
-The current domain test suite contains 45 tests. A successful run should finish with:
+The current domain test suite contains 46 tests.
 
-```text
-Ran 45 tests
+Run the complete project test suite with:
 
-OK
+```bash
+python manage.py test
 ```
 
-For Week 13, I also ran `python manage.py check` and tested the project from a fresh clone to confirm that both
-migrations applied successfully.
+The complete suite currently contains 48 tests, including the Week 14 Django tests for the open-Trails catalog query and
+the missing Trail detail 404 response.
 
-In the browser, I checked that Parks could be added in Django Admin, Trails could be assigned to Parks, the trail
-catalog displayed the correct Park, and the park detail page showed the related Trails.
+A successful full test run finishes with `Ran 48 tests` followed by `OK`.
+
+I also ran `python manage.py check` and confirmed that Django reports no system-check issues.
+
+The final clean-clone verification will be completed during the Week 14 handoff before the final release.
 
 ### Verify the domain package
 
 The domain engine is stored in the `waypoint_core` package so it can be reused by the Django application.
 
-With the virtual environment active, run:
-
-```bash
-python -c "import waypoint_core"
-```
+With the virtual environment active, run `python -c "import waypoint_core"`.
 
 A successful import returns to the command prompt without an error.
 
@@ -276,7 +248,8 @@ database persistence.
 `Distance` represents a non-negative distance in kilometres or miles. It supports validation, unit conversion,
 arithmetic, comparisons, and sorting.
 
-For mixed-unit arithmetic, I convert the right-hand distance to the unit of the left-hand `Distance` before performing the calculation.
+For mixed-unit arithmetic, I convert the right-hand distance to the unit of the left-hand `Distance` before performing
+the calculation.
 
 For example:
 
@@ -364,12 +337,14 @@ The pure-Python trail classes use simple estimated-time calculations based on di
 - `trails/admin.py` – configures Trail and Park management in Django Admin.
 - `trails/views.py` – provides the database-backed trail catalog, trail detail, and park detail views.
 - `trails/urls.py` – defines the routes for the `trails` application.
+- `trails/tests.py` – contains Django tests for the trail catalog and trail detail views.
 - `templates/base.html` – provides the shared page layout.
 - `templates/catalog.html` – displays the database-backed trail catalog.
 - `templates/trail_detail.html` – displays information for an individual trail.
 - `templates/park_detail.html` – displays a park and its related trails.
 - `waypoint_core/` – contains the reusable pure-Python domain engine.
 - `tests/` – contains the pure-Python automated test suite.
+- `docs/screenshots/` – contains the final Trail catalog and Django Admin screenshots used in this README.
 
 The Django application is kept separate from `waypoint_core` so the original object-oriented domain logic can remain
 reusable while Django handles the web interface and database persistence.
@@ -382,6 +357,10 @@ Waypoint/
 ├── README.md
 ├── manage.py
 ├── requirements.txt
+├── docs/
+│   └── screenshots/
+│       ├── admin.png
+│       └── catalog.png
 ├── static/
 │   └── style.css
 ├── templates/
@@ -435,13 +414,7 @@ Waypoint/
 
 ## Local development files
 
-The following local files and folders are intentionally excluded from Git:
-
-```text
-env/
-db.sqlite3
-__pycache__/
-```
+The following local files and folders are intentionally excluded from Git: `env/`, `db.sqlite3`, and `__pycache__/`.
 
 The `env/` folder contains locally installed Python packages, while `db.sqlite3` contains the local development
 database.
@@ -451,7 +424,8 @@ applied. Local administrator accounts, Parks, and Trail records must therefore b
 
 ## Git workflow
 
-I use a separate Git branch for each project week. After the work is completed and self-reviewed, the branch is merged into `main`.
+I use a separate Git branch for each project week. After the work is completed and self-reviewed, the branch is merged
+into `main`.
 
 Branches used so far:
 
@@ -463,6 +437,7 @@ week-10-views-urls-forms
 week-11-template-language
 week-12-orm-and-admin
 week-13-relationships-and-foreignkeys
+week-14-hardening-and-handoff
 ```
 
 Milestone tags created so far:
@@ -474,43 +449,30 @@ v9
 v10
 v11
 v12
+v13
 ```
+
+The final Week 14 branch will be merged through the final pull request before the `v1.0` release tag is created.
 
 ## Troubleshooting
 
 ### Django is unavailable
 
-Make sure the virtual environment is active:
+Make sure the virtual environment is active by running `source env/bin/activate`.
 
-```bash
-source env/bin/activate
-```
-
-Then check the installed Django version:
-
-```bash
-python -m django --version
-```
+Then check the installed Django version with `python -m django --version`.
 
 ### `ModuleNotFoundError: waypoint_core`
 
 Make sure you are running the command from the project root.
 
-You can verify the package with:
-
-```bash
-python -c "import waypoint_core"
-```
+You can verify the package with `python -c "import waypoint_core"`.
 
 A successful import returns to the command prompt without an error.
 
 ### Database has not been initialized
 
-Run:
-
-```bash
-python manage.py migrate
-```
+Run `python manage.py migrate`.
 
 This creates the local SQLite database and applies the project migrations.
 
