@@ -18,6 +18,11 @@ class DistanceTests(unittest.TestCase):
         with self.assertRaises(ValueError):
             Distance(5, "metres")
 
+    def test_unit_is_normalized(self) -> None:
+        distance = Distance(5, " KM ")
+
+        self.assertEqual(distance.unit, "km")
+
     def test_conversion_round_trip_returns_original_value(self) -> None:
         original = Distance(10, "km")
         round_trip = original.convert("mi").convert("km")
