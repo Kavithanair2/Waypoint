@@ -1,12 +1,19 @@
 from django.contrib import admin
 
-from .models import Trail
+from .models import Park, Trail
+
+
+@admin.register(Park)
+class ParkAdmin(admin.ModelAdmin):
+    list_display = ("name", "region")
+    search_fields = ("name", "region")
 
 
 @admin.register(Trail)
 class TrailAdmin(admin.ModelAdmin):
     list_display = (
         "name",
+        "park",
         "distance_km",
         "elevation_gain",
         "difficulty",
