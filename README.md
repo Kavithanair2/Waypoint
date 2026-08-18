@@ -8,8 +8,8 @@ trip-planner website.
 ## Project status
 
 Waypoint is currently in Week 14, the final hardening and handoff stage. The latest work adds the required Django and
-domain tests, final project screenshots, and documentation updates before the clean-clone verification and final
-release.
+domain tests, final project screenshots, and documentation updates, clean-clone verification, and preparation for the
+final release.
 
 ## Technology
 
@@ -214,13 +214,15 @@ python manage.py test
 ```
 
 The complete suite currently contains 48 tests, including the Week 14 Django tests for the open-Trails catalog query and
-the missing Trail detail 404 response.
+missing Trail detail 404 response, plus a domain test for Distance unit normalization.
 
 A successful full test run finishes with `Ran 48 tests` followed by `OK`.
 
 I also ran `python manage.py check` and confirmed that Django reports no system-check issues.
 
-The final clean-clone verification will be completed during the Week 14 handoff before the final release.
+I completed a clean-clone verification using Python 3.12. The requirements
+installed successfully, migrations applied successfully, all 48 tests passed, and the homepage and /trails/ catalog
+loaded successfully.
 
 ### Verify the domain package
 
