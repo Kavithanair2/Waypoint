@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block title %}{{ park.name }} | Waypoint{% endblock %}
+
+{% block content %}
+    <h1>{{ park.name }}</h1>
+
+    <p><strong>Region:</strong> {{ park.region }}</p>
+
+    <h2>Trails</h2>
+
+    {% if trails %}
+        <ul>
+            {% for trail in trails %}
+                <li>
+                    {{ trail.name }} — {{ trail.distance_km|floatformat:1 }} km
+                </li>
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>No trails are currently assigned to this park.</p>
+    {% endif %}
+
+    <p>
+        <a href="{% url 'trail_catalog' %}">Back to trail catalog</a>
+    </p>
+{% endblock %}

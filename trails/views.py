@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404, render
 from waypoint_core.distance import Distance
 from waypoint_core.trail_types import DayHike
 
-from .models import Trail
+from .models import Park, Trail
 
 
 def catalog(request):
@@ -31,5 +31,18 @@ def detail(request, trail_id):
         {
             "trail": trail,
             "estimated_time": estimated_time,
+        },
+    )
+
+def park_detail(request, park_id):
+    park = get_object_or_404(Park, id=park_id)
+    trails = park.trail_set.all().order_by("distance_km")
+
+    return render(
+        request,
+        "park_detail.html",
+        {
+            "park": park,
+            "trails": trails,
         },
     )
